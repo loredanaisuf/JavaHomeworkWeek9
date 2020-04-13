@@ -40,6 +40,28 @@ public class Calculator {
         return result;
     }
 
+    public double calculateFromSring(String expresion){
+        String[] splitExpresion = expresion.split(" ");
+
+        double number,result=0.0;
+        String formatNumber;
+        char operand;
+
+        result = Double.parseDouble(splitExpresion[0]);
+        formatNumber = splitExpresion[1];
+        result = this.convertToMeter(result,formatNumber);
+
+        for(int i=2; i<splitExpresion.length-2; i = i+3){
+            operand = splitExpresion[i].charAt(0);
+            number = Double.parseDouble(splitExpresion[i+1]);
+            formatNumber = splitExpresion[i+2];
+            number = this.convertToMeter(number,formatNumber);
+            result = this.calculate(result,operand,number);
+        }
+        return result;
+    }
+
+
     public double convertFromMeter(double value, String format) {
         double result = value;
         switch (format) {

@@ -108,25 +108,7 @@ public class AppTest
         Calculator calculator = new Calculator();
         String expresion = "10 cm + 1 m - 10 mm + 1 km - 0.9 dm";
         double expected = calculator.convertToMeter(10, "cm") + 1 - calculator.convertToMeter(10, "mm") + calculator.convertToMeter(1, "km") - calculator.convertToMeter(0.9, "dm");
-        String[] splitExpresion = expresion.split(" ");
-        for(String s : splitExpresion)
-            System.out.println(s);
-        double number,result=0.0;
-        String formatNumber;
-        char operand;
-        System.out.println(splitExpresion.length );
-        System.out.println(splitExpresion.length-5);
-        result = Double.parseDouble(splitExpresion[0]);
-        formatNumber = splitExpresion[1];
-        result = calculator.convertToMeter(result,formatNumber);
-
-        for(int i=2; i<splitExpresion.length-2; i = i+3){
-            operand = splitExpresion[i].charAt(0);
-            number = Double.parseDouble(splitExpresion[i+1]);
-            formatNumber = splitExpresion[i+2];
-            number = calculator.convertToMeter(number,formatNumber);
-            result = calculator.calculate(result,operand,number);
-        }
+        double result = calculator.calculateFromSring(expresion);
 
         assertEquals(expected,result,0);
     }
@@ -137,25 +119,18 @@ public class AppTest
         Calculator calculator = new Calculator();
         String expresion = "10 cm + 1 m - 10 mm + 1 km - 0.9 dm";
         double expected = calculator.convertToMeter(10, "cm") + 1 - calculator.convertToMeter(10, "mm") + calculator.convertToMeter(1, "km") - calculator.convertToMeter(0.9, "dm");
-        String[] splitExpresion = expresion.split(" ");
-//        for(String s : splitExpresion)
-//            System.out.println(s);
-        double number,result=0.0;
-        String formatNumber;
-        char operand;
+        double result = calculator.calculateFromSring(expresion);
+        result = calculator.convertFromMeter(result, "dm");
+        assertEquals(calculator.convertFromMeter(expected, "dm"),result,0);
+    }
 
-        result = Double.parseDouble(splitExpresion[0]);
-        formatNumber = splitExpresion[1];
-        result = calculator.convertToMeter(result,formatNumber);
-
-        for(int i=2; i<splitExpresion.length-2; i = i+3){
-            operand = splitExpresion[i].charAt(0);
-            number = Double.parseDouble(splitExpresion[i+1]);
-            formatNumber = splitExpresion[i+2];
-            number = calculator.convertToMeter(number,formatNumber);
-            result = calculator.calculate(result,operand,number);
-        }
-
+    @Test
+    public void test8()
+    {
+        Calculator calculator = new Calculator();
+        String expresion = "10 cm + 1 m - 10 mm + 0.9 dm";
+        double expected = calculator.convertToMeter(10, "cm") + 1 - calculator.convertToMeter(10, "mm") +  calculator.convertToMeter(0.9, "dm");
+        double result = calculator.calculateFromSring(expresion);
         result = calculator.convertFromMeter(result, "dm");
         assertEquals(calculator.convertFromMeter(expected, "dm"),result,0);
     }
