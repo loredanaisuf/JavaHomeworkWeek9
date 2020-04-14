@@ -1,9 +1,10 @@
 package ro.siit;
 
+
 public class Calculator {
 
-    public double convertToMeter(double value, String format) {
-        double result = value ;
+    public double convertToMeter(double value, String format) throws IllegalArgumentException {
+        double result;//= value ;
         switch (format) {
             case ("mm"): {
                 result = value * 0.001;
@@ -17,10 +18,15 @@ public class Calculator {
                 result = value * 0.1;
                 break;
             }
-            case ("km"): {
-                result = value * 100.0;
+            case ("m"): {
+                result = value;
                 break;
             }
+            case ("km"): {
+                result = value * 1000.0;
+                break;
+            }
+            default: throw new IllegalArgumentException("The measure have to be mm,cm,dm,m,km ");
         }
         return result;
     }
@@ -41,6 +47,11 @@ public class Calculator {
     }
 
     public double calculateFromSring(String expresion){
+        try{
+            this.validateString(expresion);
+        }catch (IllegalArgumentException iae){
+            System.out.println("The string is not valid!");
+        }
         String[] splitExpresion = expresion.split(" ");
 
         double number,result=0.0;
@@ -61,8 +72,50 @@ public class Calculator {
         return result;
     }
 
+    public void validateString(String expresion) throws IllegalArgumentException{
+        String[] splitExpresion = expresion.split(" ");
+        if(splitExpresion.length<5){
+            System.out.println("Number of parameter is too less!");
+            throw new IllegalArgumentException("Number of parameter is too less!");
+        }
 
-    public double convertFromMeter(double value, String format) {
+        int i = 0;
+        try{
+            Double.parseDouble(splitExpresion[i]);
+        } catch (Exception e){
+            System.out.println("This parameter have to be number!");
+            throw new IllegalArgumentException("This parameter:  " + splitExpresion[i] + "have to be number!");
+        }
+        i++;
+        String measure = splitExpresion[i];
+        if(!(measure.equals("mm") ||measure.equals("cm") || measure.equals("dm") || measure.equals("m") || measure.equals("km") )){
+            System.out.println("This parameter have to be mm, cm, dm, m or km!");
+            throw new IllegalArgumentException("This parameter: " + measure + "have to be mm, cm, dm, m or km!");
+        }
+        i++;
+        while(i<splitExpresion.length-3){
+            if(!(splitExpresion[i].equals("+") || splitExpresion[i].equals("-"))){
+                System.out.println("This parameter: " + splitExpresion[i] + " have to be + or -!");
+                throw new IllegalArgumentException("This parameter have to + or -!");
+            }
+            i++;
+            try{
+                Double.parseDouble(splitExpresion[i]);
+            } catch (Exception e){
+                System.out.println("This parameter: " + splitExpresion[i] + "  have to be number!");
+                throw new IllegalArgumentException("This parameter have to be number!");
+            }
+            i++;
+            measure = splitExpresion[i];
+            if(!(measure.equals("mm") ||measure.equals("cm") || measure.equals("dm") || measure.equals("m") || measure.equals("km") )){
+                System.out.println("This parameter: " + splitExpresion[i] + "  have to be mm, cm, dm, m or km!");
+                throw new IllegalArgumentException("This parameter have to be mm, cm, dm, m or km!");
+            }
+            i++;
+        }
+    }
+
+    public double convertFromMeter(double value, String format) throws IllegalArgumentException{
         double result = value;
         switch (format) {
             case ("mm"): {
@@ -77,10 +130,15 @@ public class Calculator {
                 result = value * 10;
                 break;
             }
+            case ("m"): {
+                result = value;
+                break;
+            }
             case ("km"): {
                 result = value * 0.001;
                 break;
             }
+            default: throw new IllegalArgumentException("The measure have to be mm,cm,dm,m,km ");
         }
         return result;
     }
